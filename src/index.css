@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+@theme {
+  --color-olive: #556B2F;
+  --color-olive-dark: #3F5122;
+  --color-olive-light: #6B8440;
+  --color-gold: #D4AF37;
+  --color-gold-light: #E5C76B;
+  --color-gold-dark: #B8962E;
+  --color-beige: #F5EFE6;
+  --color-beige-dark: #E8DFD0;
+  --color-charcoal: #2C2C2C;
+  --color-charcoal-light: #4A4A4A;
+  --color-cream: #FFFEF9;
+
+  --font-heading: "Playfair Display", Georgia, serif;
+  --font-body: "Poppins", system-ui, sans-serif;
+
+  --shadow-soft: 0 4px 24px rgba(44, 44, 44, 0.06);
+  --shadow-card: 0 8px 40px rgba(44, 44, 44, 0.08);
+  --shadow-elevated: 0 16px 48px rgba(44, 44, 44, 0.12);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--color-charcoal);
+    background-color: var(--color-beige);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-olive) 25%, transparent);
+    color: var(--color-charcoal);
+  }
+}
+
+@layer components {
+  .container-luxury {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-olive px-8 py-3.5 text-sm font-medium tracking-wide text-white transition-all duration-300 hover:bg-olive-dark hover:shadow-lg active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-olive/30 bg-transparent px-8 py-3.5 text-sm font-medium tracking-wide text-olive transition-all duration-300 hover:border-olive hover:bg-olive/5 active:scale-[0.98];
+  }
+
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-gold px-8 py-3.5 text-sm font-medium tracking-wide text-charcoal transition-all duration-300 hover:bg-gold-light hover:shadow-lg active:scale-[0.98];
+  }
+
+  .section-padding {
+    @apply py-20 md:py-28 lg:py-32;
+  }
+
+  .card-luxury {
+    @apply overflow-hidden rounded-2xl bg-white shadow-[var(--shadow-card)] transition-shadow duration-500 hover:shadow-[var(--shadow-elevated)];
+  }
+
+  .input-field {
+    @apply w-full rounded-xl border border-beige-dark bg-white px-4 py-3.5 text-sm text-charcoal outline-none transition-all duration-200 placeholder:text-charcoal-light/50 focus:border-olive focus:ring-2 focus:ring-olive/15;
+  }
+
+  .label-field {
+    @apply mb-2 block text-sm font-medium text-charcoal;
+  }
+
+  .gradient-overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(44, 44, 44, 0.35) 0%,
+      rgba(44, 44, 44, 0.55) 50%,
+      rgba(44, 44, 44, 0.75) 100%
+    );
+  }
+
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #D4AF37, #E5C76B, #B8962E);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
