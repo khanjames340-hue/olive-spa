@@ -7,7 +7,7 @@ import LiveBookingButton from './LiveBookingButton'
 
 export default function Layout() {
   const { pathname } = useLocation()
-  const isDashboard = pathname.startsWith('/dashboard') || pathname.startsWith('/admin')
+  const isDashboard = pathname === '/admin' || pathname === '/admin/login'
 
   useEffect(() => {
     window.scrollTo(0, 0)

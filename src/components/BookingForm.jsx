@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { Calendar, Send } from 'lucide-react'
 import { services } from '../data/services'
 import { TIME_SLOTS } from '../data/constants'
-import { useAuth } from '../context/AuthContext'
+import api from '../utils/api'
 import {
   validateEmail,
   validatePhone,
@@ -26,7 +26,8 @@ export default function BookingForm({ defaultServiceId = '' }) {
   const [form, setForm] = useState({ ...initial, serviceId: defaultServiceId })
   const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
-  const { createAppointment, user } = useAuth()
+  const [submitError, setSubmitError] = useState('')
+  const [website, setWebsite] = useState('')
   const navigate = useNavigate()
 
   const update = (field, value) => {
@@ -60,37 +61,54 @@ export default function BookingForm({ defaultServiceId = '' }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setSubmitError('')
     if (!validate()) return
     setSubmitting(true)
 
     const service = services.find((s) => s.id === form.serviceId)
-    const appointment = createAppointment({
+    const booking = {
       fullName: form.fullName.trim(),
       phone: form.phone.trim(),
       email: form.email.trim(),
       serviceId: form.serviceId,
       serviceName: service?.name || '',
+      price: service?.price || 0,
       preferredDate: form.preferredDate,
       preferredTime: form.preferredTime,
       notes: form.notes.trim(),
-      userId: user?.id || null,
-      price: service?.price || 0,
+      website,
+    }
+
+    let appointment
+    try {
+      ;({ appointment } = await api.createBooking(booking))
+    } catch (err) {
+      if (err.status === 400 || err.status === 429) {
+        if (err.errors) setErrors(err.errors)
+        setSubmitError(err.message)
+        setSubmitting(false)
+        return
+      }
+      // Booking server unavailable: WhatsApp alone still gets the request to the team
+      appointment = {
+        fullName: booking.fullName,
+        serviceName: booking.serviceName,
+        preferredDate: booking.preferredDate,
+        preferredTime: booking.preferredTime,
+        status: 'pending',
+      }
+    }
+
+    const whatsappMessage = bookingWhatsAppMessage({
+      name: booking.fullName,
+      service: booking.serviceName,
+      date: booking.preferredDate,
+      time: booking.preferredTime,
+      phone: booking.phone,
+      reference: appointment.reference,
     })
-
-    const message = bookingWhatsAppMessage({
-      name: form.fullName.trim(),
-      service: service?.name || '',
-      date: form.preferredDate,
-      time: form.preferredTime,
-      phone: form.phone.trim(),
-    })
-
-    openWhatsApp(message)
-
-    setTimeout(() => {
-      setSubmitting(false)
-      navigate('/booking/confirmation', { state: { appointment } })
-    }, 400)
+    openWhatsApp(whatsappMessage)
+    navigate('/booking/confirmation', { state: { appointment, whatsappMessage } })
   }
 
   const minDate = new Date().toISOString().split('T')[0]
@@ -225,6 +243,24 @@ export default function BookingForm({ defaultServiceId = '' }) {
         />
       </div>
 
+      {/* Hidden from people; catches spam bots that fill every field */}
+      <div className="hidden" aria-hidden="true">
+        <label htmlFor="website">Website</label>
+        <input
+          id="website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+        />
+      </div>
+
+      {submitError && (
+        <p className="rounded-xl bg-red-50 p-4 text-sm text-red-700" role="alert">
+          {submitError}
+        </p>
+      )}
+
       <button type="submit" disabled={submitting} className="btn-primary w-full md:w-auto">
         {submitting ? (
           'Sending...'
@@ -237,7 +273,7 @@ export default function BookingForm({ defaultServiceId = '' }) {
         )}
       </button>
       <p className="text-xs text-charcoal-light">
-        Your booking will open WhatsApp so our team can confirm your appointment.
+        Your booking is sent to our team, and WhatsApp opens so you can message us directly.
       </p>
     </motion.form>
   )

@@ -6,13 +6,11 @@ import SEO from '../components/SEO'
 import Hero from '../components/Hero'
 import MembershipCard from '../components/MembershipCard'
 import { memberships } from '../data/memberships'
-import { useAuth } from '../context/AuthContext'
 import { formatPrice } from '../utils/helpers'
 
 export default function Membership() {
   const [params] = useSearchParams()
   const highlight = params.get('plan')
-  const { updateUser, isAuthenticated } = useAuth()
   const [selected, setSelected] = useState(
     () => memberships.find((m) => m.id === highlight) || null
   )
@@ -24,9 +22,6 @@ export default function Membership() {
   }
 
   const handlePaymentPlaceholder = () => {
-    if (isAuthenticated) {
-      updateUser({ membership: selected.id })
-    }
     setPaid(true)
   }
 

@@ -6,6 +6,9 @@ RewriteBase /
 RewriteCond %{HTTPS} !=on
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+# Leave the API to the Node.js app (cPanel "Setup Node.js App" at /api)
+RewriteRule ^api(/|$) - [L]
+
 # Serve existing files and folders directly
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d

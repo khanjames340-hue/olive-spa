@@ -1,12 +1,13 @@
 import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { CheckCircle, Calendar, ArrowRight } from 'lucide-react'
+import { CheckCircle, Calendar, ArrowRight, MessageCircle } from 'lucide-react'
 import SEO from '../components/SEO'
-import { formatDate } from '../utils/helpers'
+import { formatDate, buildWhatsAppUrl } from '../utils/helpers'
 
 export default function BookingConfirmation() {
   const { state } = useLocation()
   const appointment = state?.appointment
+  const whatsappMessage = state?.whatsappMessage
 
   return (
     <>
@@ -25,8 +26,8 @@ export default function BookingConfirmation() {
               Booking Received
             </h1>
             <p className="mt-4 text-charcoal-light">
-              Thank you for choosing Olive Spa. Your request has been sent via WhatsApp and
-              queued for email confirmation. Our team will confirm shortly.
+              Thank you for choosing Olive Spa. Our team has your request and will confirm your
+              appointment shortly.
             </p>
 
             {appointment && (
@@ -36,6 +37,14 @@ export default function BookingConfirmation() {
                   Appointment Details
                 </div>
                 <dl className="space-y-2 text-charcoal-light">
+                  {appointment.reference && (
+                    <div className="flex justify-between gap-4">
+                      <dt>Reference</dt>
+                      <dd className="font-medium tracking-wider text-charcoal">
+                        {appointment.reference}
+                      </dd>
+                    </div>
+                  )}
                   <div className="flex justify-between gap-4">
                     <dt>Name</dt>
                     <dd className="font-medium text-charcoal">{appointment.fullName}</dd>
@@ -62,6 +71,21 @@ export default function BookingConfirmation() {
                   </div>
                 </dl>
               </div>
+            )}
+
+            {whatsappMessage && (
+              <p className="mt-6 text-sm text-charcoal-light">
+                WhatsApp didn’t open?{' '}
+                <a
+                  href={buildWhatsAppUrl(whatsappMessage)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 font-medium text-olive underline"
+                >
+                  <MessageCircle size={14} />
+                  Send your booking on WhatsApp
+                </a>
+              </p>
             )}
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">

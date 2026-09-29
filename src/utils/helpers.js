@@ -5,9 +5,11 @@ export function buildWhatsAppUrl(message) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`
 }
 
-export function bookingWhatsAppMessage({ name, service, date, time, phone }) {
+export function bookingWhatsAppMessage({ name, service, date, time, phone, reference }) {
   return `Hello Olive Spa, I would like to book an appointment.
-
+${reference ? `
+Booking reference: ${reference}
+` : ''}
 Name: ${name}
 Service: ${service}
 Date: ${date}
