@@ -85,13 +85,6 @@ export default function BookingForm({ defaultServiceId = '' }) {
       phone: form.phone.trim(),
     })
 
-    // Simulate email notification (logged for demo; backend sends real emails)
-    console.info('[Olive Spa] Email notification queued:', {
-      to: 'hello@olivespa.ss',
-      subject: `New Booking: ${service?.name}`,
-      appointment,
-    })
-
     openWhatsApp(message)
 
     setTimeout(() => {
@@ -244,7 +237,7 @@ export default function BookingForm({ defaultServiceId = '' }) {
         )}
       </button>
       <p className="text-xs text-charcoal-light">
-        Your booking will open WhatsApp to confirm with our team and queue an email notification.
+        Your booking will open WhatsApp so our team can confirm your appointment.
       </p>
     </motion.form>
   )

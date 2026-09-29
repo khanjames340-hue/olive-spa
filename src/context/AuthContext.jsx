@@ -23,48 +23,11 @@ function saveJSON(key, value) {
   localStorage.setItem(key, JSON.stringify(value))
 }
 
-const DEMO_ADMIN = {
-  id: 'admin-1',
-  name: 'Olive Admin',
-  email: 'admin@olivespa.ss',
-  password: 'admin123',
-  role: 'admin',
-  phone: '+211 912 345 678',
-  membership: null,
-  loyaltyPoints: 0,
-  visitHistory: [],
-  totalSpending: 0,
-}
-
-const DEMO_CUSTOMER = {
-  id: 'customer-1',
-  name: 'Amina Okello',
-  email: 'amina@example.com',
-  password: 'customer123',
-  role: 'customer',
-  phone: '+211 911 222 333',
-  membership: 'olive-premium',
-  loyaltyPoints: 350,
-  visitHistory: [
-    { service: 'Glow Facial', date: '2026-06-10', amount: 55 },
-    { service: 'Swedish Massage', date: '2026-05-20', amount: 45 },
-  ],
-  totalSpending: 100,
-  lastAppointment: '2026-06-10',
-}
-
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => loadJSON(STORAGE_KEYS.user, null))
   const [appointments, setAppointments] = useState(() =>
     loadJSON(STORAGE_KEYS.appointments, [])
   )
-
-  useEffect(() => {
-    const users = loadJSON(STORAGE_KEYS.users, null)
-    if (!users) {
-      saveJSON(STORAGE_KEYS.users, [DEMO_ADMIN, DEMO_CUSTOMER])
-    }
-  }, [])
 
   useEffect(() => {
     if (user) saveJSON(STORAGE_KEYS.user, user)

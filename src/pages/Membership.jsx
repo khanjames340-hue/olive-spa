@@ -112,15 +112,6 @@ export default function Membership() {
                   </button>
                   <p className="mt-3 text-center text-xs text-charcoal-light">
                     Demo mode — no real payment processed.
-                    {!isAuthenticated && (
-                      <>
-                        {' '}
-                        <Link to="/login" className="text-olive underline">
-                          Sign in
-                        </Link>{' '}
-                        to save membership to your account.
-                      </>
-                    )}
                   </p>
                 </>
               ) : (
@@ -129,8 +120,8 @@ export default function Membership() {
                   <p className="mt-3 text-sm text-charcoal-light">
                     Your membership is active. Enjoy priority booking and exclusive benefits.
                   </p>
-                  <Link to="/dashboard" className="btn-primary mt-6 inline-flex">
-                    Go to Dashboard
+                  <Link to="/booking" className="btn-primary mt-6 inline-flex">
+                    Book Your First Visit
                   </Link>
                 </div>
               )}

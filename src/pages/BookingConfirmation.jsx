@@ -65,8 +65,8 @@ export default function BookingConfirmation() {
             )}
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-              <Link to="/dashboard" className="btn-primary">
-                View Dashboard
+              <Link to="/services" className="btn-primary">
+                Explore Services
               </Link>
               <Link to="/" className="btn-secondary">
                 Back Home

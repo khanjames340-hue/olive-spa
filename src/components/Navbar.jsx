@@ -3,13 +3,11 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Calendar } from 'lucide-react'
 import { NAV_LINKS } from '../data/constants'
-import { useAuth } from '../context/AuthContext'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const location = useLocation()
-  const { user, isAdmin } = useAuth()
   const isHome = location.pathname === '/'
 
   useEffect(() => {
@@ -73,25 +71,6 @@ export default function Navbar() {
         </div>
 
         <div className="hidden items-center gap-3 xl:flex">
-          {user ? (
-            <Link
-              to={isAdmin ? '/admin' : '/dashboard'}
-              className={`text-sm font-medium transition-colors ${
-                solid ? 'text-olive hover:text-olive-dark' : 'text-white hover:text-gold-light'
-              }`}
-            >
-              {isAdmin ? 'Admin' : 'My Account'}
-            </Link>
-          ) : (
-            <Link
-              to="/login"
-              className={`text-sm font-medium transition-colors ${
-                solid ? 'text-olive hover:text-olive-dark' : 'text-white hover:text-gold-light'
-              }`}
-            >
-              Sign In
-            </Link>
-          )}
           <Link
             to="/booking"
             className={`inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-medium transition-all duration-300 ${
@@ -144,12 +123,6 @@ export default function Navbar() {
                 <Link to="/booking" className="btn-primary w-full">
                   <Calendar size={16} />
                   Book Appointment
-                </Link>
-                <Link
-                  to={user ? (isAdmin ? '/admin' : '/dashboard') : '/login'}
-                  className="btn-secondary w-full"
-                >
-                  {user ? (isAdmin ? 'Admin Dashboard' : 'My Account') : 'Sign In'}
                 </Link>
               </div>
             </div>
